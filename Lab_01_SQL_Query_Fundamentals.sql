@@ -48,29 +48,51 @@ ORDER BY list_price DESC;
 -- ------------------------------------------------------------------
 -- 6). Product ID, Name & List Price Costing Between $15 and $20
 -- ------------------------------------------------------------------
-
-
+SELECT id AS product_id
+	, product_name
+    , list_price
+FROM northwind.products
+WHERE 15.00 < list_price < 20.00
+ORDER BY list_price DESC;
 
 -- ------------------------------------------------------------------
 -- 7). Product Name & List Price Costing Above Average List Price
 -- ------------------------------------------------------------------
-
+SELECT product_name
+    , list_price
+FROM northwind.products
+WHERE list_price > mean(list_price)
+ORDER BY list_price DESC;
 
 -- ------------------------------------------------------------------
 -- 8). Product Name & List Price of 10 Most Expensive Products 
 -- ------------------------------------------------------------------
-
+SELECT product_name
+    , list_price
+FROM northwind.products
+ORDER BY list_price DESC
+LIMIT 10;
 
 -- ------------------------------------------------------------------ 
 -- 9). Count of Current and Discontinued Products 
 -- ------------------------------------------------------------------
-
+SELECT discontinued
+	count_of_current_products = 0
+	count_of_discontinued_products = 0
+	IF discontinued = 0
+    THEN count_of_current_products + 1
+    IF discontinued <> 0
+    THEN count_of_discontinued_products + 1
+    COUNT(count_of_current_products) AS Num_Current_Products
+    COUNT(count_of_discontinued_products) AS Num_Discontinued_Products
+FROM northwind.products;
 
 -- ------------------------------------------------------------------
 -- 10). Product Name, Units on Order and Units in Stock
 --      Where Quantity In-Stock is Less Than the Quantity On-Order. 
 -- ------------------------------------------------------------------
-
+SELECT product_name
+	, 
 
 
 -- ------------------------------------------------------------------
