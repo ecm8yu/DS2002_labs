@@ -76,42 +76,60 @@ LIMIT 10;
 -- ------------------------------------------------------------------ 
 -- 9). Count of Current and Discontinued Products 
 -- ------------------------------------------------------------------
-SELECT discontinued
-	count_of_current_products = 0
-	count_of_discontinued_products = 0
-	IF discontinued = 0
-    THEN count_of_current_products + 1
-    IF discontinued <> 0
-    THEN count_of_discontinued_products + 1
-    COUNT(count_of_current_products) AS Num_Current_Products
-    COUNT(count_of_discontinued_products) AS Num_Discontinued_Products
-FROM northwind.products;
+UPDATE northwind.products SET discontinued = 1 WHERE id = 95;
+
+SELECT CASE discontinued
+			WHEN 1 THEN 'yes'
+            ELSE 'no'
+		END AS is_discontinued
+	, COUNT(*) as product_count
+FROM northwind.products
+GROUP BY discontinued;
 
 -- ------------------------------------------------------------------
 -- 10). Product Name, Units on Order and Units in Stock
 --      Where Quantity In-Stock is Less Than the Quantity On-Order. 
 -- ------------------------------------------------------------------
 SELECT product_name
-	, 
-
+	, reorder_level AS units_in_stock
+    , target_level AS units_on_order
+FROM northwind.products
+WHERE reorder_level < target_level;
 
 -- ------------------------------------------------------------------
 -- EXTRA CREDIT -----------------------------------------------------
 -- ------------------------------------------------------------------
-
-
 -- ------------------------------------------------------------------
 -- 11). Products with Supplier Company & Address Info
 -- ------------------------------------------------------------------
-
-
+SELECT p.product_name
+	, p.list_price AS product_list_price
+    , p.category AS product_category
+    , s.company AS supplier_company
+    , s.address AS supplier_address
+    , s.city AS supplier_city
+    , s.state_province AS supplier_state_province
+    , s.zip_postal_code AS supplier_zip_postal_code
+FROM northwind.suppliers s
+INNER JOIN northwind.products p
+ON s.id = p.supplier_ids;
+#left outer join gives all left able and matches from right
+#right outer table gives all of right table and matches from the left
 
 -- ------------------------------------------------------------------
 -- 12). Number of Products per Category With Less Than 5 Units
 -- ------------------------------------------------------------------
-
-
+SELECT category
+	, COUNT(*) as units_in_stock
+FROM northwind.products
+GROUP BY category
+HAVING units_in_stock < 5;
 
 -- ------------------------------------------------------------------
 -- 13). Number of Products per Category Priced Less Than $20.00
 -- ------------------------------------------------------------------
+SELECT category
+	, COUNT(*) as product_count
+FROM northwind.products
+WHERE list_price < 20.00
+GROUP BY category;
